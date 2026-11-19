@@ -1,0 +1,18 @@
+[Unit]
+Description=Prefect server (scheduler + run history for the crime ETL), localhost only
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/cpd-crime-trends
+Environment=PYTHONUNBUFFERED=1
+Environment=PREFECT_SERVER_ANALYTICS_ENABLED=false
+ExecStart=/home/ubuntu/cpd-crime-trends/.venv/bin/prefect server start --host 127.0.0.1 --port 4200
+Restart=on-failure
+RestartSec=20
+
+[Install]
+WantedBy=multi-user.target

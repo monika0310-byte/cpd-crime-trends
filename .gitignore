@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+*.pem
+.ssh/
+*.p12
+*.pfx
+id_rsa*
+.env.*
+!.env.example
+*.sql.gz
+backups/
+.DS_Store
+Thumbs.db
+*.key

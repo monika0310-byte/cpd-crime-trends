@@ -1,0 +1,21 @@
+[Unit]
+Description=Cambridge crime ETL (Prefect flow, daily at 06:00 America/New_York)
+After=network-online.target docker.service cpd-prefect.service
+Wants=network-online.target
+Requires=docker.service cpd-prefect.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/cpd-crime-trends
+EnvironmentFile=/home/ubuntu/cpd-crime-trends/.env
+Environment=PYTHONUNBUFFERED=1
+Environment=PREFECT_API_URL=http://127.0.0.1:4200/api
+ExecStartPre=/usr/bin/curl -fsS --retry 60 --retry-delay 2 --retry-connrefused -o /dev/null http://127.0.0.1:4200/api/health
+ExecStart=/home/ubuntu/cpd-crime-trends/.venv/bin/python -m pipeline.flow --serve
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
